@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract JewelChain {
     Stone[] stones;
-    // Mapping of adress to name
+    // Mapping of address to name
     mapping(address => string) participants;
     
     struct Stone {
@@ -13,10 +13,10 @@ contract JewelChain {
         string characteristic;
         address miner;
         address owner;
-        Step[] steps;
+        SupplyChainStep[] supplyChainSteps;
     }
 
-    struct Step {
+    struct SupplyChainStep {
         address responsibleParty;
         string actionLocation;
         string description;
@@ -31,7 +31,7 @@ contract JewelChain {
     }
      function registerNewStone(string memory origin ,string memory characteristic ) public {
         uint256 newStoneId = stones.length;
-        Step[] memory steps;
+        SupplyChainStep[] memory supplyChainStep;
         Stone memory stone = Stone({
             stoneId: newStoneId,
             timestamp: block.timestamp,
@@ -39,7 +39,7 @@ contract JewelChain {
             characteristic: characteristic,
             miner: msg.sender,
             owner: msg.sender,
-            steps: steps
+            supplyChainSteps: supplyChainStep
         });
         stones.push(stone);
         emit NewStoneRegistered(msg.sender, newStoneId);
