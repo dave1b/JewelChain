@@ -5,7 +5,7 @@ contract JewelChain {
     Stone[] stones;
     // Mapping of address to name
     mapping(address => string) participants;
-    
+
     struct Stone {
         uint256 stoneId;
         uint256 timestamp;
@@ -28,15 +28,19 @@ contract JewelChain {
     function registerNewParticipant(string memory participantName) public {
         participants[msg.sender] = participantName;
     }
-     function registerNewStone(string memory origin ,string memory characteristic ) public {
+
+    function registerNewStone(
+        string memory origin,
+        string memory characteristic
+    ) public {
         uint256 newStoneId = stones.length;
         // SupplyChainStep[] storage supplyChainStep;
 
         Stone storage stone = stones.push();
-        
+
         stone.stoneId = newStoneId;
         stone.timestamp = block.timestamp;
-        stone.origin= origin;
+        stone.origin = origin;
         stone.characteristic = characteristic;
         stone.miner = msg.sender;
         stone.owner = msg.sender;
@@ -44,8 +48,8 @@ contract JewelChain {
         emit NewStoneRegistered(msg.sender, newStoneId);
     }
 
-    function passOwnership(uint256 stoneId, address newOwner) public  {
-        if(stones[stoneId].owner == msg.sender){
+    function passOwnership(uint256 stoneId, address newOwner) public {
+        if (stones[stoneId].owner == msg.sender) {
             stones[stoneId].owner = newOwner;
         }
     }
@@ -53,11 +57,16 @@ contract JewelChain {
     // überprüfen ob owner, nacher step eintragen
     // function addStep() public {}
 
-
     // für anzeigen von Informationen zu Stone
     // function getStoneInformation() public view returns (Stone memory stone) {}
-    
-    // für anzeigen von Informationen zu Participant
-    // function getParticipanInformation() public view returns (string memory participantName) {}
 
+    // für anzeigen von Informationen zu Participant
+    function getParticipanInformation(address participantAddress)
+        public
+        view
+        returns (string memory participantName)
+    {
+        string memory _name = participants[participantAddress];
+        return _name;
+    }
 }
