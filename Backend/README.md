@@ -3,14 +3,18 @@
 npx hardhat help
  
 New Project
-```npx hardhat
+```
+npx hardhat
 ```
 Compile Contract
-```npx hardhat compile
+```
+npx hardhat compile
 ```
 Deploy Contract
-```npx hardhat run scripts/deploy.ts
+```
+npx hardhat run scripts/deploy.ts
 ```
 Run Blockchain
-```npx hardhat node
+```
+npx hardhat node
 ```
