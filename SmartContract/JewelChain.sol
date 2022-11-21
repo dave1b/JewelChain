@@ -23,7 +23,6 @@ contract JewelChain {
         int64 timestamp;
     }
 
-
     event NewStoneRegistered(address indexed owner, uint256 stoneId);
 
     function registerNewParticipant(string memory participantName) public {
@@ -31,17 +30,17 @@ contract JewelChain {
     }
      function registerNewStone(string memory origin ,string memory characteristic ) public {
         uint256 newStoneId = stones.length;
-        SupplyChainStep[] memory supplyChainStep;
-        Stone memory stone = Stone({
-            stoneId: newStoneId,
-            timestamp: block.timestamp,
-            origin: origin,
-            characteristic: characteristic,
-            miner: msg.sender,
-            owner: msg.sender,
-            supplyChainSteps: supplyChainStep
-        });
-        stones.push(stone);
+        // SupplyChainStep[] storage supplyChainStep;
+
+        Stone storage stone = stones.push();
+        
+        stone.stoneId = newStoneId;
+        stone.timestamp = block.timestamp;
+        stone.origin= origin;
+        stone.characteristic = characteristic;
+        stone.miner = msg.sender;
+        stone.owner = msg.sender;
+        // stone.supplyChainSteps = supplyChainStep;
         emit NewStoneRegistered(msg.sender, newStoneId);
     }
 
@@ -52,13 +51,13 @@ contract JewelChain {
     }
 
     // überprüfen ob owner, nacher step eintragen
-    function addStep() public {}
+    // function addStep() public {}
 
 
     // für anzeigen von Informationen zu Stone
-    function getStoneInformation() public view returns (Stone memory stone) {}
+    // function getStoneInformation() public view returns (Stone memory stone) {}
     
     // für anzeigen von Informationen zu Participant
-    function getParticipanInformation() public view returns (string memory participantName) {}
+    // function getParticipanInformation() public view returns (string memory participantName) {}
 
 }
