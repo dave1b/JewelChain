@@ -14,7 +14,7 @@ async function main() {
   await jewelChain.deployed();
 
   console.log(
-    `Lock with 1 ETH deployed to ${jewelChain.address}`
+    `JewelChain with 1 ETH deployed to ${jewelChain.address}`
   );
 }
 

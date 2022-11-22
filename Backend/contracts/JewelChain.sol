@@ -23,7 +23,7 @@ contract JewelChain {
         uint256 timestamp;
     }
 
-    event NewStoneRegistered(address owner, uint256 stoneId);
+    event NewStoneRegistered(address indexed owner, uint256 stoneId);
 
     function registerNewParticipant(string memory participantName) public {
         participants[msg.sender] = participantName;
@@ -60,7 +60,7 @@ contract JewelChain {
         stones[stoneId].owner = newOwner;
     }
 
-    // 端berpr端fen ob owner, nacher step eintragen
+    // überprüfen ob owner, nacher step eintragen
     function addStep(
         uint256 stoneId,
         string memory actionLocation,
@@ -78,7 +78,7 @@ contract JewelChain {
         );
     }
 
-    // f端r anzeigen von Informationen zu Stone
+    // für anzeigen von Informationen zu Stone
     function getStoneInformation(uint256 stoneId)
         public
         view
@@ -88,7 +88,7 @@ contract JewelChain {
         return _stone;
     }
 
-    // f端r anzeigen von Informationen zu Participant
+    // für anzeigen von Informationen zu Participant
     function getParticipanInformation(address participantAddress)
         public
         view

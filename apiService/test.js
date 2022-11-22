@@ -2,7 +2,7 @@ const Web3 = require("web3");
 
 const web3 = new Web3("http://localhost:8545");
 const smartContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const userAddress = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+const userAddress = '0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097';
 const userPrivateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
 var ABI = [
@@ -10,7 +10,7 @@ var ABI = [
         "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "address",
                 "name": "owner",
                 "type": "address"
@@ -195,10 +195,12 @@ var ABI = [
         "type": "function"
     }
 ]
+
+
 const contract = new web3.eth.Contract(ABI, smartContractAddress);
 
 // contract.methods
-//     .registerNewParticipant("dave")
+//     .registerNewParticipant("apple")
 //     .send({ from: userAddress })
 //     .on('receipt', function (receipt) {
 //         // receipt example
@@ -206,17 +208,17 @@ const contract = new web3.eth.Contract(ABI, smartContractAddress);
 //     })
 
 
-// contract.methods.getParticipanInformation('0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266').call()
-//     .then(function (result) {
-//         console.log(result)
-//     });
+contract.methods.getParticipanInformation(userAddress).call()
+    .then(function (result) {
+        console.log(result)
+    });
 
 
-contract.methods
-    .registerNewStone("sempach", "blau")
-    .send({ from: userAddress })
-    .on('receipt', function (receipt) {
-        console.log(receipt);
-    }
-    )
+// contract.methods
+//     .registerNewStone("sempach", "blau")
+//     .send({ from: userAddress, gas: 500000 })
+//     .on('receipt', function (receipt) {
+//         console.log(receipt);
+//     }
+//     )
 
