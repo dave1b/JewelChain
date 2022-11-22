@@ -1,0 +1,234 @@
+{
+	"compiler": {
+		"version": "0.8.6+commit.11564f7e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "stoneId",
+						"type": "uint256"
+					}
+				],
+				"name": "NewStoneRegistered",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "stoneId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "actionLocation",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					}
+				],
+				"name": "addStep",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "participantAddress",
+						"type": "address"
+					}
+				],
+				"name": "getParticipanInformation",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "participantName",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "stoneId",
+						"type": "uint256"
+					}
+				],
+				"name": "getStoneInformation",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "stoneId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "origin",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "characteristic",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "miner",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "responsibleParty",
+										"type": "address"
+									},
+									{
+										"internalType": "string",
+										"name": "actionLocation",
+										"type": "string"
+									},
+									{
+										"internalType": "string",
+										"name": "description",
+										"type": "string"
+									},
+									{
+										"internalType": "uint256",
+										"name": "timestamp",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct JewelChain.SupplyChainStep[]",
+								"name": "supplyChainSteps",
+								"type": "tuple[]"
+							}
+						],
+						"internalType": "struct JewelChain.Stone",
+						"name": "stone",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "stoneId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "passOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "participantName",
+						"type": "string"
+					}
+				],
+				"name": "registerNewParticipant",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "origin",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "characteristic",
+						"type": "string"
+					}
+				],
+				"name": "registerNewStone",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"SmartContract\\JewelChain.sol": "JewelChain"
+		},
+		"evmVersion": "berlin",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"SmartContract\\JewelChain.sol": {
+			"keccak256": "0xc922fb7e4ae3f6669d80c79348664c11d4e81237bab81283569b9609f7b4a173",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://11f83ce6a2961293abbe8eeffa57ccf07f86f09099c97ad8616da3178e832f7c",
+				"dweb:/ipfs/QmZ6BWtggCRWBH6M9GGAWVYKzWFBgxebEiipcPBhJGq6NN"
+			]
+		}
+	},
+	"version": 1
+}
