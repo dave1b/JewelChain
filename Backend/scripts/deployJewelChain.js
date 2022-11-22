@@ -9,12 +9,12 @@ const hre = require("hardhat");
 async function main() {
 
   const JewelChain = await hre.ethers.getContractFactory("JewelChain");
-  const lock = await JewelChain.deploy();
+  const jewelChain = await JewelChain.deploy();
 
-  await lock.deployed();
+  await jewelChain.deployed();
 
   console.log(
-    `Lock with 1 ETH deployed to ${lock.address}`
+    `Lock with 1 ETH deployed to ${jewelChain.address}`
   );
 }
 

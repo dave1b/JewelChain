@@ -20,10 +20,10 @@ contract JewelChain {
         address responsibleParty;
         string actionLocation;
         string description;
-        int64 timestamp;
+        uint256 timestamp;
     }
 
-    event NewStoneRegistered(address indexed owner, uint256 stoneId);
+    event NewStoneRegistered(address owner, uint256 stoneId);
 
     function registerNewParticipant(string memory participantName) public {
         participants[msg.sender] = participantName;
@@ -31,35 +31,64 @@ contract JewelChain {
 
     function registerNewStone(
         string memory origin,
-        string memory characteristic
+        string memory characteristic /*, string memory description*/
     ) public {
         uint256 newStoneId = stones.length;
-        // SupplyChainStep[] storage supplyChainStep;
 
         Stone storage stone = stones.push();
+
         stone.stoneId = newStoneId;
         stone.timestamp = block.timestamp;
         stone.origin = origin;
         stone.characteristic = characteristic;
         stone.miner = msg.sender;
         stone.owner = msg.sender;
-        // stone.supplyChainSteps = supplyChainStep;
+
+        /*addStep(newStoneId, origin, description);*/
         emit NewStoneRegistered(msg.sender, newStoneId);
     }
 
-    function passOwnership(uint256 stoneId, address newOwner) public {
-        if (stones[stoneId].owner == msg.sender) {
-            stones[stoneId].owner = newOwner;
-        }
+    modifier ownerCheck(uint256 stoneId) {
+        require(stones[stoneId].owner == msg.sender);
+        _;
     }
 
-    // überprüfen ob owner, nacher step eintragen
-    // function addStep() public {}
+    function passOwnership(uint256 stoneId, address newOwner)
+        public
+        ownerCheck(stoneId)
+    {
+        stones[stoneId].owner = newOwner;
+    }
 
-    // für anzeigen von Informationen zu Stone
-    // function getStoneInformation() public view returns (Stone memory stone) {}
+    // 端berpr端fen ob owner, nacher step eintragen
+    function addStep(
+        uint256 stoneId,
+        string memory actionLocation,
+        string memory description
+    ) public ownerCheck(stoneId) {
+        uint256 currentTimestamp = block.timestamp;
+        address responsibleParty = msg.sender;
+        stones[stoneId].supplyChainSteps.push(
+            SupplyChainStep(
+                responsibleParty,
+                actionLocation,
+                description,
+                currentTimestamp
+            )
+        );
+    }
 
-    // für anzeigen von Informationen zu Participant
+    // f端r anzeigen von Informationen zu Stone
+    function getStoneInformation(uint256 stoneId)
+        public
+        view
+        returns (Stone memory stone)
+    {
+        Stone memory _stone = stones[stoneId];
+        return _stone;
+    }
+
+    // f端r anzeigen von Informationen zu Participant
     function getParticipanInformation(address participantAddress)
         public
         view

@@ -222,11 +222,19 @@
 	},
 	"sources": {
 		"SmartContract\\JewelChain.sol": {
+<<<<<<< Updated upstream
 			"keccak256": "0xc922fb7e4ae3f6669d80c79348664c11d4e81237bab81283569b9609f7b4a173",
 			"license": "MIT",
 			"urls": [
 				"bzz-raw://11f83ce6a2961293abbe8eeffa57ccf07f86f09099c97ad8616da3178e832f7c",
 				"dweb:/ipfs/QmZ6BWtggCRWBH6M9GGAWVYKzWFBgxebEiipcPBhJGq6NN"
+=======
+			"keccak256": "0x3ba4f55375b8bbadf91b31b881ba5b2cd9cec2e6dc05f2613d31d4629c31a5f4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f0774ef09d3b32c11f82ae39009287291f29e0204fe39139f2aee61a08cc2696",
+				"dweb:/ipfs/QmPBT5ZRuWVNHMdoHLNQ6rCAbuNZARQsehoVReZSoNh2Jk"
+>>>>>>> Stashed changes
 			]
 		}
 	},

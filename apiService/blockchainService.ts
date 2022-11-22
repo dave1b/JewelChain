@@ -34,6 +34,126 @@ const ABI = [
         type: "uint256",
       },
       {
+        internalType: "string",
+        name: "actionLocation",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "description",
+        type: "string",
+      },
+    ],
+    name: "addStep",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "participantAddress",
+        type: "address",
+      },
+    ],
+    name: "getParticipanInformation",
+    outputs: [
+      {
+        internalType: "string",
+        name: "participantName",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "stoneId",
+        type: "uint256",
+      },
+    ],
+    name: "getStoneInformation",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "stoneId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "origin",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "characteristic",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "miner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "responsibleParty",
+                type: "address",
+              },
+              {
+                internalType: "string",
+                name: "actionLocation",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "timestamp",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct JewelChain.SupplyChainStep[]",
+            name: "supplyChainSteps",
+            type: "tuple[]",
+          },
+        ],
+        internalType: "struct JewelChain.Stone",
+        name: "stone",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "stoneId",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "newOwner",
         type: "address",
@@ -82,7 +202,7 @@ const contract = new web3.eth.Contract(ABI, smartContractAddress);
 function registerNewParticipant(participantName: string) {
   contract.methods
     .registerNewParticipant(participantName)
-    .call(function (err, res) {
+    .send({ from: userAddress }, function (err, res) {
       if (err) {
         console.log("An error occured", err);
         return;
@@ -119,9 +239,9 @@ function passOwnership(stoneId: number, newOwnerAdress: string) {
       console.log("Success", res);
     });
 }
-function addStep(actionLocation: string, description: string) {
+function addStep(stoneId: number, actionLocation: string, description: string) {
   contract.methods
-    .addStep(actionLocation, description)
+    .addStep(stoneId, actionLocation, description)
     .call(function (err, res) {
       if (err) {
         console.log("An error occured", err);
@@ -160,4 +280,5 @@ function getParticipanInformation(participantAddress: string) {
 //   }
 // );
 
-registerNewParticipant("HSLU");
+// registerNewParticipant("HSLU");
+getParticipanInformation(userAddress);

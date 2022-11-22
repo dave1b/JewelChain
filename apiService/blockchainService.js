@@ -1,11 +1,8 @@
-const Web3 = require("web3");
-
-const web3 = new Web3("http://localhost:8545");
-const smartContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const userAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-const userPrivateKey =
-    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-
+var Web3 = require("web3");
+var web3 = new Web3("http://localhost:8545");
+var smartContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+var userAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+var userPrivateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 var ABI = [
     {
         anonymous: false,
@@ -196,12 +193,12 @@ var ABI = [
         type: "function"
     },
 ];
-const contract = new web3.eth.Contract(ABI, smartContractAddress);
+var contract = new web3.eth.Contract(ABI, smartContractAddress);
 
 function registerNewParticipant(participantName) {
     contract.methods
         .registerNewParticipant(participantName)
-        .send({ from: userAddress }, function (err, res) {
+        .call(function (err, res) {
             if (err) {
                 console.log("An error occured", err);
                 return;
@@ -210,13 +207,22 @@ function registerNewParticipant(participantName) {
         });
 }
 function registerNewStone(origin, characteristic) {
-    contract.methods
+    var NewStoneRegisteredEvent = contract.methods
         .registerNewStone(origin, characteristic)
-        .send({ from: userAddress })
-        .on('receipt', function (receipt) {
-            console.log(receipt);
+        .call(function (err, res) {
+            if (err) {
+                console.log("An error occured", err);
+                return;
+            }
+            console.log("Success", res);
+        });
+    NewStoneRegisteredEvent.watch(function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
         }
-        )
+        console.log(result);
+    });
 }
 function passOwnership(stoneId, newOwnerAdress) {
     contract.methods
@@ -229,9 +235,9 @@ function passOwnership(stoneId, newOwnerAdress) {
             console.log("Success", res);
         });
 }
-function addStep(actionLocation, description) {
+function addStep(stoneId, actionLocation, description) {
     contract.methods
-        .addStep(actionLocation, description)
+        .addStep(stoneId, actionLocation, description)
         .call(function (err, res) {
             if (err) {
                 console.log("An error occured", err);
@@ -249,12 +255,16 @@ function getStoneInformation(stoneId) {
         console.log("Success", res);
     });
 }
-function getParticipanInformation(userAddress) {
-    contract.methods.getParticipanInformation(userAddress).call()
-        .then(function (result) {
+function getParticipanInformation(participantAddress) {
+    contract.methods
+        .getParticipanInformation(participantAddress)
+        .call(function (err, res) {
+            if (err) {
+                console.log("An error occured", err);
+                return;
+            }
+            console.log("Success", res);
         });
-
-
 }
 // contract.events.NewStoneRegistered(
 //   {
@@ -264,7 +274,5 @@ function getParticipanInformation(userAddress) {
 //     console.log(event);
 //   }
 // );
-
 // registerNewParticipant("HSLU");
 getParticipanInformation(userAddress);
-// registerNewStone("Sempach", "blau");
