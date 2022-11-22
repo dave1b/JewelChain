@@ -14,14 +14,14 @@ Compile Contract
 npx hardhat compile
 ```
 
-Deploy Contract
-
-```
-npx hardhat run scripts/deployJewelChain.js
-```
-
 Run Blockchain
 
 ```
 npx hardhat node
+```
+
+Deploy Contract on running Blockchain instance
+
+```
+npx hardhat run scripts/deploy.js --network localhost
 ```
