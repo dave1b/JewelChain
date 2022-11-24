@@ -14,7 +14,7 @@ export const UpdateStonePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { showToast } = useToasts();
 
-  const updateStoneInfo = async () => {
+  const fetchStone = async () => {
     if (!stoneId) return;
 
     try {
@@ -33,13 +33,13 @@ export const UpdateStonePage = () => {
   };
 
   useEffect(() => {
-    if (stoneId) updateStoneInfo();
+    if (stoneId) fetchStone();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stoneId]);
 
   const onStoneIdChanged = (stoneId: number) => setStoneId(stoneId);
 
-  const onAddedStep = () => updateStoneInfo();
+  const onAddedStep = () => fetchStone();
 
   const onPassedOwnership = () => {
     setStoneId(undefined);

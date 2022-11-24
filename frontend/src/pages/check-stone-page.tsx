@@ -12,7 +12,7 @@ export const CheckStonePage = () => {
   const { showToast } = useToasts();
 
   // fetches stone information for stoneId and sets stone state
-  const updateStone = async () => {
+  const fetchStone = async () => {
     if (!stoneId) return;
 
     try {
@@ -33,7 +33,7 @@ export const CheckStonePage = () => {
 
   // re-query stone information if stoneId has changed
   useEffect(() => {
-    if (stoneId) updateStone();
+    if (stoneId) fetchStone();
     else setStone(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stoneId]);

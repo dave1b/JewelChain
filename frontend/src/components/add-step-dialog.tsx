@@ -21,7 +21,7 @@ const DEFAULT_STEP = {
 export const AddStepDialog = ({ stoneId, visible, onHide, onAddedStep }: AddStepDialogProps) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [{ actionLocation, description }, setStep] = useState<{ actionLocation: string; description: string }>(
+  const [{ actionLocation, description }, setInputs] = useState<{ actionLocation: string; description: string }>(
     DEFAULT_STEP,
   );
   const { showToast } = useToasts();
@@ -30,11 +30,11 @@ export const AddStepDialog = ({ stoneId, visible, onHide, onAddedStep }: AddStep
 
   const resetForm = () => {
     setSubmitted(false);
-    setStep(DEFAULT_STEP);
+    setInputs(DEFAULT_STEP);
   };
 
   const onValueChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    setStep((stone) => ({ ...stone, [e.target.name]: e.target.value }));
+    setInputs((stone) => ({ ...stone, [e.target.name]: e.target.value }));
   };
 
   const onAddClick = async () => {

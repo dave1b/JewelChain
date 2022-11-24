@@ -14,18 +14,18 @@ const DEFAULT_STONE = {
 export const NewStonePage = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [{ origin, characteristic }, setStone] = useState<{ origin: string; characteristic: string }>(DEFAULT_STONE);
+  const [{ origin, characteristic }, setInput] = useState<{ origin: string; characteristic: string }>(DEFAULT_STONE);
   const { showToast } = useToasts();
 
   const isFormValid = origin && origin.trim() && characteristic && characteristic.trim();
 
   const resetForm = () => {
     setSubmitted(false);
-    setStone(DEFAULT_STONE);
+    setInput(DEFAULT_STONE);
   };
 
   const onValueChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    setStone((stone) => ({ ...stone, [e.target.name]: e.target.value }));
+    setInput((stone) => ({ ...stone, [e.target.name]: e.target.value }));
   };
 
   const onCreateClick = async () => {

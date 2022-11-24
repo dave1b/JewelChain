@@ -17,7 +17,7 @@ export const useParticipantResolving = (participantAddress: address): string => 
   const [{ participantName }, setParticipant] = useState<ParticipantInformation>(DEFAULT_PARTICIPANT);
   const { showToast } = useToasts();
 
-  const updateParticipant = async () => {
+  const fetchParticipant = async () => {
     if (!participantAddress) return;
 
     try {
@@ -38,7 +38,7 @@ export const useParticipantResolving = (participantAddress: address): string => 
   // load a new participant's name when the address changes
   useEffect(() => {
     setParticipant(DEFAULT_PARTICIPANT);
-    if (participantAddress) updateParticipant();
+    if (participantAddress) fetchParticipant();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participantAddress]);
 
