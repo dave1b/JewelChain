@@ -1,0 +1,12 @@
+/* Normalization */
+html {
+  font-size: 1rem;
+}
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-weight: normal;
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
