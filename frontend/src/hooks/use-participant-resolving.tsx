@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getParticipantInformation, ParticipantInformation } from '../api/queries/get-participant-information';
 import { address } from '../api/type';
