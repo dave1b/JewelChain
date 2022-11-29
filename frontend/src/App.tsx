@@ -9,6 +9,10 @@ import { NotFoundPage } from './pages/not-found-page';
 import { RegisterParticipantPage } from './pages/register-participant-page';
 import { UpdateStonePage } from './pages/update-stone-page';
 
+import { ethEnabled, getAccount } from './utils/meta'
+ethEnabled()
+getAccount()
+
 export const App = () => {
   return (
     <BrowserRouter>
