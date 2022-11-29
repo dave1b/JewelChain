@@ -5,7 +5,7 @@ const smartContractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 const userAddress = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const userPrivateKey =
   "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-
+const secondaryUserAdress = "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
 const ABI = [
   {
     anonymous: false,
@@ -200,85 +200,84 @@ const ABI = [
 const contract = new web3.eth.Contract(ABI, smartContractAddress);
 
 function registerNewParticipant(participantName: string) {
-  contract.methods
+  return contract.methods
     .registerNewParticipant(participantName)
-    .send({ from: userAddress }, function (err, res) {
-      if (err) {
-        console.log("An error occured", err);
-        return;
-      }
-      console.log("Success", res);
+    .send({ from: userAddress })
+    .on("receipt", function (receipt) {
+      return receipt;
     });
 }
-function registerNewStone(origin: string, characteristic: string) {
-  var NewStoneRegisteredEvent = contract.methods
+
+async function registerNewStone(origin: string, characteristic: string) {
+  var res = await contract.methods
     .registerNewStone(origin, characteristic)
-    .call(function (err, res) {
-      if (err) {
-        console.log("An error occured", err);
-        return;
-      }
-      console.log("Success", res);
+    .send({ from: userAddress })
+    .on("receipt", function (receipt) {
+      return receipt;
     });
-  NewStoneRegisteredEvent.watch(function (err, result) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(result);
-  });
+  return res.events.NewStoneRegistered.returnValues;
 }
+
 function passOwnership(stoneId: number, newOwnerAdress: string) {
-  contract.methods
+  return contract.methods
     .passOwnership(stoneId, newOwnerAdress)
-    .call(function (err, res) {
-      if (err) {
-        console.log("An error occured", err);
-        return;
-      }
-      console.log("Success", res);
+    .send({ from: userAddress })
+    .on("receipt", function (receipt) {
+      return receipt;
     });
 }
+
 function addStep(stoneId: number, actionLocation: string, description: string) {
-  contract.methods
+  return contract.methods
     .addStep(stoneId, actionLocation, description)
-    .call(function (err, res) {
-      if (err) {
-        console.log("An error occured", err);
-        return;
-      }
-      console.log("Success", res);
+    .send({ from: userAddress })
+    .on("receipt", function (receipt) {
+      return receipt;
     });
 }
 function getStoneInformation(stoneId: number) {
-  contract.methods.getStoneInformation(stoneId).call(function (err, res) {
-    if (err) {
-      console.log("An error occured", err);
-      return;
-    }
-    console.log("Success", res);
-  });
+  return contract.methods
+    .getStoneInformation(stoneId)
+    .call(function (err, res) {
+      if (err) {
+        console.log("An error occured", err);
+        return;
+      }
+      return res;
+    });
 }
 function getParticipanInformation(participantAddress: string) {
-  contract.methods
+  return contract.methods
     .getParticipanInformation(participantAddress)
     .call(function (err, res) {
       if (err) {
         console.log("An error occured", err);
         return;
       }
-      console.log("Success", res);
+      return res;
     });
 }
 
-// contract.events.NewStoneRegistered(
-//   {
-//     fromBlock: 0,
-//   },
-//   function (error, event) {
-//     console.log(event);
-//   }
-// );
-
-// registerNewParticipant("HSLU");
-getParticipanInformation(userAddress);
+async function main() {
+  registerNewParticipant("HSLU").then((res) => {
+    // console.log(res);
+  });
+  var stone;
+  await registerNewStone("Sempach", "blau").then((res) => {
+    stone = res;
+    console.log(stone);
+    console.log(stone.owner);
+    console.log(stone.stoneId);
+  });
+  addStep(stone.stoneId, "zurich", "verkauft");
+  await passOwnership(stone.stoneId, secondaryUserAdress).then((res) => {
+    console.log(res);
+  });
+  await getStoneInformation(stone.stoneId).then((res) => {
+    console.log(res);
+  });
+  await getParticipanInformation(userAddress).then((res) => {
+    console.log(res);
+  });
+}
+main();
