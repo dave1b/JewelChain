@@ -1,4 +1,5 @@
 import { Button } from 'primereact/button';
+import { Tooltip } from 'primereact/tooltip';
 import React, { useEffect, useState } from 'react';
 
 import { StoneInformation, useGetStoneInformation } from '../api/queries/use-get-stone-information';
@@ -8,6 +9,8 @@ import { NeedsAuthContainer } from '../components/needs-auth-container';
 import { PassOwnershipDialog } from '../components/pass-ownership-dialog';
 import { StoneInformationDisplay } from '../components/stone-information-display';
 import { useToasts } from '../hooks/use-toasts';
+import { isEqualAddress } from '../utils/is-equal-address';
+import { useAuth } from './../hooks/use-auth';
 
 export const UpdateStonePage = () => {
   const [stoneId, setStoneId] = useState<number>();
@@ -15,6 +18,7 @@ export const UpdateStonePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { showToast } = useToasts();
   const getStoneInformation = useGetStoneInformation();
+  const { accountAddress } = useAuth();
 
   const fetchStone = async () => {
     if (!stoneId && stoneId !== 0) return;
@@ -56,6 +60,8 @@ export const UpdateStonePage = () => {
   const onHidePassOwnerDialog = () => setPassOwnerDialogVisible(false);
   const onShowPassOwnerDialog = () => setPassOwnerDialogVisible(true);
 
+  const ownsStone = isEqualAddress(stone?.owner, accountAddress);
+
   return (
     <>
       <span className="block text-6xl font-bold mb-1">Jewel aktualisieren</span>
@@ -88,19 +94,36 @@ export const UpdateStonePage = () => {
                 <StoneInformationDisplay
                   stone={stone}
                   footer={
-                    <span>
-                      <Button
-                        label="Verarbeitungsschritt hinzufügen"
-                        icon="pi pi-step-forward"
-                        onClick={onShowAddStepDialog}
-                      />
-                      <Button
-                        label="Besitz weitergeben"
-                        icon="pi pi-user-edit"
-                        className="p-button-secondary ml-2"
-                        onClick={onShowPassOwnerDialog}
-                      />
-                    </span>
+                    <div>
+                      {!ownsStone && <Tooltip target=".add-step-tooltip" position="bottom" />}
+                      <div
+                        className={'add-step-tooltip'}
+                        style={{ display: 'inline-block' }}
+                        data-pr-tooltip="Du besitzt diesen Edelstein nicht."
+                      >
+                        <Button
+                          type="button"
+                          label="Verarbeitungsschritt hinzufügen"
+                          icon="pi pi-step-forward"
+                          onClick={onShowAddStepDialog}
+                          disabled={!ownsStone}
+                        />
+                      </div>
+                      {!ownsStone && <Tooltip target=".pass-ownership-tooltip" position="bottom" />}
+                      <div
+                        className="pass-ownership-tooltip"
+                        style={{ display: 'inline-block' }}
+                        data-pr-tooltip="Du besitzt diesen Edelstein nicht."
+                      >
+                        <Button
+                          label="Besitz weitergeben"
+                          icon="pi pi-user-edit"
+                          className="p-button-secondary ml-2"
+                          onClick={onShowPassOwnerDialog}
+                          disabled={!ownsStone}
+                        />
+                      </div>
+                    </div>
                   }
                 />
               </>
