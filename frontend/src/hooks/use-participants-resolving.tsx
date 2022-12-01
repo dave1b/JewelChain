@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useGetParticipantInformation } from '../api/queries/use-get-participant-information';
 import { address } from '../api/type';
+import { usePrevious } from './../utils/use-previous';
 import { useToasts } from './use-toasts';
 
 type ResolvedParticipant = {
@@ -44,10 +45,14 @@ export const useParticipantsResolving = (participantAddresses: address[]): Recor
     setLoading(false);
   };
 
+  const prevAdresses = usePrevious(participantAddresses);
+
   // load a new participant's name when the address changes
   useEffect(() => {
-    setParticipants([]);
-    if (participantAddresses.length > 0) fetchParticipants();
+    // check if adresses have changed
+    if (JSON.stringify(prevAdresses) !== JSON.stringify(participantAddresses)) {
+      if (participantAddresses.length > 0) fetchParticipants();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participantAddresses.length]);
 
