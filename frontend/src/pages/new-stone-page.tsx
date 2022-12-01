@@ -44,7 +44,7 @@ export const NewStonePage = () => {
         summary: 'Registered the new stone.',
         detail: `Jewel-ID: ${newStone.stoneId}`,
       });
-      createCertificate(newStone);
+      await createCertificate(newStone);
       setSubmitted(false);
       resetForm();
     } catch (error: any) {
@@ -64,6 +64,8 @@ export const NewStonePage = () => {
       <p className="mt-0 mb-4 text-700 line-height-3">
         Hier können neue Edelsteine in die JewelChain aufgenommen werden.
       </p>
+      {/* canvas used to create QR-Code */}
+      <canvas id="qr_code" style={{ display: 'none' }}></canvas>
       <NeedsAuthContainer>
         <>
           <div className="p-fluid">
