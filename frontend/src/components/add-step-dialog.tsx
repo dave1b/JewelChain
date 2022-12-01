@@ -2,7 +2,7 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import React, { useState } from 'react';
 
-import { addStep } from '../api/mutations/add-step';
+import { useAddStep } from '../api/mutations/use-add-step';
 import { useToasts } from '../hooks/use-toasts';
 import { FormTextInput } from '../ui/form-text-input';
 
@@ -25,6 +25,7 @@ export const AddStepDialog = ({ stoneId, visible, onHide, onAddedStep }: AddStep
     DEFAULT_STEP,
   );
   const { showToast } = useToasts();
+  const addStep = useAddStep();
 
   const isFormValid = actionLocation && actionLocation.trim() && description && description.trim();
 

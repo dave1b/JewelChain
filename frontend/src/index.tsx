@@ -9,6 +9,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { App } from './App';
+import { AuthProvider } from './hooks/use-auth';
 import { ToastsProvider } from './hooks/use-toasts';
 import reportWebVitals from './reportWebVitals';
 
@@ -16,7 +17,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <ToastsProvider>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ToastsProvider>
   </React.StrictMode>,
 );

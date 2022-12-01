@@ -9,10 +9,6 @@ import { NotFoundPage } from './pages/not-found-page';
 import { RegisterParticipantPage } from './pages/register-participant-page';
 import { UpdateStonePage } from './pages/update-stone-page';
 
-import { ethEnabled, getAccount } from './utils/meta'
-ethEnabled()
-getAccount()
-
 export const App = () => {
   return (
     <BrowserRouter>
@@ -22,7 +18,7 @@ export const App = () => {
           <Route path="check" element={<CheckStonePage />} />
           <Route path="update" element={<UpdateStonePage />} />
           <Route path="new" element={<NewStonePage />} />
-          <Route path="register" element={<RegisterParticipantPage />} />
+          <Route path="profile" element={<RegisterParticipantPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

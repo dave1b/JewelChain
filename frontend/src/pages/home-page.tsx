@@ -1,19 +1,16 @@
 import { Button } from 'primereact/button';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../hooks/use-auth';
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const { login, authProcessActive, accountAddress } = useAuth();
 
-  const onCheckJewelClick = () => {
-    navigate('check');
-  };
-
-  const onLoginClick = () => {
-    // TODO: Login
-  };
+  const onCheckJewelClick = () => navigate('check');
 
   return (
     <div className="grid grid-nogutter text-800 mt-6" style={{ height: '50vh' }}>
@@ -26,7 +23,16 @@ export const HomePage = () => {
             transparent gemacht wird.
           </p>
           <Button label="Jewel prüfen" type="button" className="mr-3 p-button-raised" onClick={onCheckJewelClick} />
-          <Button label="Anmelden" type="button" className="p-button-outlined" onClick={onLoginClick} />
+          {!accountAddress && (
+            <Button
+              label="Anmelden"
+              type="button"
+              className="p-button-outlined"
+              onClick={login}
+              disabled={authProcessActive}
+              loading={authProcessActive}
+            />
+          )}
         </section>
       </div>
       <div className="col-12 md:col-6 overflow-hidden">

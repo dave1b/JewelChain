@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { getStoneInformation, StoneInformation } from '../api/queries/get-stone-information';
+import { StoneInformation, useGetStoneInformation } from '../api/queries/use-get-stone-information';
 import { JewelCodeInput } from '../components/jewel-code-input';
 import { StoneInformationDisplay } from '../components/stone-information-display';
 import { useToasts } from '../hooks/use-toasts';
@@ -10,10 +10,11 @@ export const CheckStonePage = () => {
   const [stone, setStone] = useState<StoneInformation>();
   const [loading, setLoading] = useState<boolean>(false);
   const { showToast } = useToasts();
+  const getStoneInformation = useGetStoneInformation();
 
   // fetches stone information for stoneId and sets stone state
   const fetchStone = async () => {
-    if (!stoneId) return;
+    if (!stoneId && stoneId !== 0) return;
 
     try {
       setLoading(true);
@@ -33,7 +34,7 @@ export const CheckStonePage = () => {
 
   // re-query stone information if stoneId has changed
   useEffect(() => {
-    if (stoneId) fetchStone();
+    if (stoneId || stoneId === 0) fetchStone();
     else setStone(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stoneId]);

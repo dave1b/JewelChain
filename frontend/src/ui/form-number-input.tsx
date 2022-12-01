@@ -26,7 +26,7 @@ export const FormNumberInput = ({
   required,
   inputNumberProps,
 }: FormNumberInputProps) => {
-  const showRequiredError = required && !hideValidationErrors && !value;
+  const showRequiredError = required && !hideValidationErrors && (!value || value !== 0);
 
   return (
     <div className={`field ${className}`}>

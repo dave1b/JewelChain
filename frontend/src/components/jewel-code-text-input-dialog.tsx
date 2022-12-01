@@ -13,18 +13,16 @@ interface JewelCodeTextInputDialogProps {
 
 export const JewelCodeTextInputDialog = ({ onCodeSubmitted, visible, onHide }: JewelCodeTextInputDialogProps) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [code, setCode] = useState<number | undefined>();
+  const [code, setCode] = useState<number | null>();
 
-  const isFormValid = !!code;
+  const isFormValid = !!code || code === 0;
 
   const resetForm = () => {
     setSubmitted(false);
     setCode(undefined);
   };
 
-  const onCodeChange = (e: InputNumberValueChangeParams) => {
-    setCode(e.value || undefined);
-  };
+  const onCodeChange = (e: InputNumberValueChangeParams) => setCode(e.value);
 
   const onSubmit = async () => {
     setSubmitted(true);
@@ -60,9 +58,9 @@ export const JewelCodeTextInputDialog = ({ onCodeSubmitted, visible, onHide }: J
           hideValidationErrors={!submitted}
           required={true}
           id="code"
-          value={code}
+          value={code || undefined}
           inputNumberProps={{
-            placeholder: '16-ziffrige Nummer',
+            placeholder: 'Nummer',
           }}
         />
       </div>

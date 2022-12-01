@@ -1,9 +1,10 @@
 import { Button } from 'primereact/button';
 import React, { useEffect, useState } from 'react';
 
-import { getStoneInformation, StoneInformation } from '../api/queries/get-stone-information';
+import { StoneInformation, useGetStoneInformation } from '../api/queries/use-get-stone-information';
 import { AddStepDialog } from '../components/add-step-dialog';
 import { JewelCodeInput } from '../components/jewel-code-input';
+import { NeedsAuthContainer } from '../components/needs-auth-container';
 import { PassOwnershipDialog } from '../components/pass-ownership-dialog';
 import { StoneInformationDisplay } from '../components/stone-information-display';
 import { useToasts } from '../hooks/use-toasts';
@@ -13,9 +14,10 @@ export const UpdateStonePage = () => {
   const [stone, setStone] = useState<StoneInformation>();
   const [loading, setLoading] = useState<boolean>(false);
   const { showToast } = useToasts();
+  const getStoneInformation = useGetStoneInformation();
 
   const fetchStone = async () => {
-    if (!stoneId) return;
+    if (!stoneId && stoneId !== 0) return;
 
     try {
       setLoading(true);
@@ -33,7 +35,7 @@ export const UpdateStonePage = () => {
   };
 
   useEffect(() => {
-    if (stoneId) fetchStone();
+    if (stoneId || stoneId === 0) fetchStone();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stoneId]);
 
@@ -61,47 +63,51 @@ export const UpdateStonePage = () => {
         Hier kannst du einen neuen Verarbeitungsschritt zu deinem Edelstein hinzufügen und den Besitz von deinem
         Edelstein weitergeben.
       </p>
-      <p className="mt-0 mb-4 text-700 line-height-3">
-        Bitte gebe zuerst an, welchen Edelstein du bearbeiten möchtest.
-      </p>
-      <JewelCodeInput onChange={onStoneIdChanged} />
-      <div className="mt-4">
-        {!!loading && 'Lade Edelstein Informationen...'}
-        {!!stone && (
-          <>
-            <AddStepDialog
-              onAddedStep={onAddedStep}
-              onHide={onHideAddStepDialog}
-              stoneId={stone.stoneId}
-              visible={addStepDialogVisible}
-            />
-            <PassOwnershipDialog
-              onPassedOwnership={onPassedOwnership}
-              onHide={onHidePassOwnerDialog}
-              stoneId={stone.stoneId}
-              visible={passOwnerDialogVisible}
-            />
-            <StoneInformationDisplay
-              stone={stone}
-              footer={
-                <span>
-                  <Button
-                    label="Verarbeitungsschritt hinzufügen"
-                    icon="pi pi-step-forward"
-                    onClick={onShowAddStepDialog}
-                  />
-                  <Button
-                    label="Besitz weitergeben"
-                    icon="pi pi-user-edit"
-                    className="p-button-secondary ml-2"
-                    onClick={onShowPassOwnerDialog}
-                  />
-                </span>
-              }
-            />
-          </>
-        )}
-      </div>
+      <NeedsAuthContainer>
+        <>
+          <p className="mt-0 mb-4 text-700 line-height-3">
+            Bitte gebe zuerst an, welchen Edelstein du bearbeiten möchtest.
+          </p>
+          <JewelCodeInput onChange={onStoneIdChanged} />
+          <div className="mt-4">
+            {!!loading && 'Lade Edelstein Informationen...'}
+            {!!stone && (
+              <>
+                <AddStepDialog
+                  onAddedStep={onAddedStep}
+                  onHide={onHideAddStepDialog}
+                  stoneId={stone.stoneId}
+                  visible={addStepDialogVisible}
+                />
+                <PassOwnershipDialog
+                  onPassedOwnership={onPassedOwnership}
+                  onHide={onHidePassOwnerDialog}
+                  stoneId={stone.stoneId}
+                  visible={passOwnerDialogVisible}
+                />
+                <StoneInformationDisplay
+                  stone={stone}
+                  footer={
+                    <span>
+                      <Button
+                        label="Verarbeitungsschritt hinzufügen"
+                        icon="pi pi-step-forward"
+                        onClick={onShowAddStepDialog}
+                      />
+                      <Button
+                        label="Besitz weitergeben"
+                        icon="pi pi-user-edit"
+                        className="p-button-secondary ml-2"
+                        onClick={onShowPassOwnerDialog}
+                      />
+                    </span>
+                  }
+                />
+              </>
+            )}
+          </div>
+        </>
+      </NeedsAuthContainer>
     </>
   );
 };

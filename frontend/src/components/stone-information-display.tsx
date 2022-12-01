@@ -2,7 +2,8 @@ import { Card, CardTemplateTypes } from 'primereact/card';
 import { Timeline } from 'primereact/timeline';
 import React from 'react';
 
-import { StoneInformation } from '../api/queries/get-stone-information';
+import { StoneInformation } from '../api/queries/use-get-stone-information';
+import { useParticipantsResolving } from '../hooks/use-participants-resolving';
 import { LabeledChip } from '../ui/labeled-chip';
 import { formatDatetime } from '../utils/format-datetime';
 import { useParticipantResolving } from './../hooks/use-participant-resolving';
@@ -15,11 +16,16 @@ interface StoneInformationProps {
 export const StoneInformationDisplay = ({ stone, footer }: StoneInformationProps) => {
   const { characteristic, miner, origin, owner, stoneId, supplyChainSteps, timestamp } = stone;
 
-  const minerName = useParticipantResolving(miner);
-  const ownerName = useParticipantResolving(owner);
+  const minerName = useParticipantResolving(miner).currentParticipantName;
+  const ownerName = useParticipantResolving(owner).currentParticipantName;
+
+  // resolve adresses in supplyChainSteps
+  const supplyChainStepsNameResolvingMap = useParticipantsResolving(
+    supplyChainSteps.map(({ responsibleParty }) => responsibleParty),
+  );
 
   const TimelineContent = (item: any) => {
-    const responsiblePartyName = useParticipantResolving(item.responsibleParty);
+    const responsiblePartyName = supplyChainStepsNameResolvingMap[item.responsibleParty];
 
     return `${responsiblePartyName} @${item.actionLocation}: ${item.description}`;
   };

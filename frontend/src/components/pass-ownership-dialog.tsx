@@ -1,8 +1,9 @@
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import React, { useState } from 'react';
+import Web3 from 'web3';
 
-import { passOwnership } from '../api/mutations/pass-ownership';
+import { usePassOwnership } from '../api/mutations/use-pass-ownership';
 import { useParticipantResolving } from '../hooks/use-participant-resolving';
 import { useToasts } from '../hooks/use-toasts';
 import { FormTextInput } from '../ui/form-text-input';
@@ -23,8 +24,11 @@ export const PassOwnershipDialog = ({ stoneId, visible, onHide, onPassedOwnershi
   const [loading, setLoading] = useState<boolean>(false);
   const [{ newOwnerAdress }, setInputs] = useState<{ newOwnerAdress?: string }>(DEFAULT_STEP);
   const { showToast } = useToasts();
+  const passOwnership = usePassOwnership();
 
-  const newOwnerName = useParticipantResolving(newOwnerAdress || '');
+  const newOwnerName = useParticipantResolving(
+    newOwnerAdress && Web3.utils.isAddress(newOwnerAdress) ? newOwnerAdress : '',
+  );
 
   const isFormValid = newOwnerAdress && newOwnerAdress.trim();
 
@@ -48,7 +52,7 @@ export const PassOwnershipDialog = ({ stoneId, visible, onHide, onPassedOwnershi
       showToast({
         severity: 'success',
         summary: 'Besitz weitergegeben.',
-        detail: `${stoneId}, ${newOwnerName}`,
+        detail: `${stoneId}, ${newOwnerName.currentParticipantName}`,
         sticky: true,
       });
       setSubmitted(false);
@@ -84,7 +88,12 @@ export const PassOwnershipDialog = ({ stoneId, visible, onHide, onPassedOwnershi
     >
       <div className="p-fluid">
         <FormTextInput
-          label="Adresse des neuen Besitzers"
+          label={
+            'Adresse des neuen Besitzers' +
+            (newOwnerName.fetchedOnce && newOwnerName.currentParticipantName
+              ? ` (${newOwnerName.currentParticipantName})`
+              : '')
+          }
           onInputChange={onValueChange}
           hideValidationErrors={!submitted}
           required={true}

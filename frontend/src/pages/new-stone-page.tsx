@@ -1,10 +1,12 @@
 import { Button } from 'primereact/button';
 import React, { useState } from 'react';
 
-import { registerNewStone } from '../api/mutations/register-new-stone';
+import { useRegisterNewStone } from '../api/mutations/use-register-new-stone';
 import { useToasts } from '../hooks/use-toasts';
 import { FormTextInput } from '../ui/form-text-input';
 import { FormTextareaInput } from '../ui/form-textarea-input';
+import { NeedsAuthContainer } from './../components/needs-auth-container';
+import { createCertificate } from './../utils/create-certificate';
 
 const DEFAULT_STONE = {
   origin: '',
@@ -16,6 +18,7 @@ export const NewStonePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [{ origin, characteristic }, setInput] = useState<{ origin: string; characteristic: string }>(DEFAULT_STONE);
   const { showToast } = useToasts();
+  const registerNewStone = useRegisterNewStone();
 
   const isFormValid = origin && origin.trim() && characteristic && characteristic.trim();
 
@@ -35,12 +38,13 @@ export const NewStonePage = () => {
 
     try {
       setLoading(true);
-      await registerNewStone(origin, characteristic);
+      const newStone = await registerNewStone(origin, characteristic);
       showToast({
         severity: 'success',
         summary: 'Registered the new stone.',
-        detail: `${origin}, ${characteristic}`,
+        detail: `Jewel-ID: ${newStone.stoneId}`,
       });
+      createCertificate(newStone);
       setSubmitted(false);
       resetForm();
     } catch (error: any) {
@@ -60,35 +64,39 @@ export const NewStonePage = () => {
       <p className="mt-0 mb-4 text-700 line-height-3">
         Hier können neue Edelsteine in die JewelChain aufgenommen werden.
       </p>
-      <div className="p-fluid">
-        <FormTextInput
-          label="Herkunft"
-          onInputChange={onValueChange}
-          hideValidationErrors={!submitted}
-          required={true}
-          id="origin"
-          value={origin}
-          inputTextProps={{ placeholder: 'Herkunft des Edelsteins' }}
-        />
-        <FormTextareaInput
-          label="Charakteristik"
-          onInputChange={onValueChange}
-          hideValidationErrors={!submitted}
-          required={true}
-          id="characteristic"
-          value={characteristic}
-          inputTextProps={{ autoResize: true, placeholder: 'Charakteristiken des Edelsteins' }}
-        />
-      </div>
-      <Button
-        label="Edelstein aufnehmen"
-        icon="pi pi-user-plus"
-        type="button"
-        className="p-button-raised"
-        loading={loading}
-        disabled={loading}
-        onClick={onCreateClick}
-      />
+      <NeedsAuthContainer>
+        <>
+          <div className="p-fluid">
+            <FormTextInput
+              label="Herkunft"
+              onInputChange={onValueChange}
+              hideValidationErrors={!submitted}
+              required={true}
+              id="origin"
+              value={origin}
+              inputTextProps={{ placeholder: 'Herkunft des Edelsteins' }}
+            />
+            <FormTextareaInput
+              label="Charakteristik"
+              onInputChange={onValueChange}
+              hideValidationErrors={!submitted}
+              required={true}
+              id="characteristic"
+              value={characteristic}
+              inputTextProps={{ autoResize: true, placeholder: 'Charakteristiken des Edelsteins' }}
+            />
+          </div>
+          <Button
+            label="Edelstein aufnehmen"
+            icon="pi pi-user-plus"
+            type="button"
+            className="p-button-raised"
+            loading={loading}
+            disabled={loading}
+            onClick={onCreateClick}
+          />
+        </>
+      </NeedsAuthContainer>
     </>
   );
 };
