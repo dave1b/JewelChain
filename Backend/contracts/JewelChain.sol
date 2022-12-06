@@ -49,7 +49,8 @@ contract JewelChain {
     }
 
     modifier ownerCheck(uint256 stoneId) {
-        require(stones[stoneId].owner == msg.sender);
+        require(stones[stoneId].owner == msg.sender,
+        "Kein OWNER: Sie muessen Eigentuemer des Steins sein, um diese Aktion auszufuehren");
         _;
     }
 
@@ -78,9 +79,25 @@ contract JewelChain {
         );
     }
 
+    function stoneExists(uint256 stoneId) private view returns (bool) {
+        for (uint i = 0; i < stones.length; i++) {
+            if (stones[i].stoneId == stoneId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    modifier checkExistingStoneID(uint256 stoneId) {
+        require(stoneExists(stoneId),
+        "Dieser Stein existiert nicht");
+        _;
+    }
+
+
     // für anzeigen von Informationen zu Stone
     function getStoneInformation(uint256 stoneId)
-        public
+        public checkExistingStoneID(stoneId)
         view
         returns (Stone memory stone)
     {
