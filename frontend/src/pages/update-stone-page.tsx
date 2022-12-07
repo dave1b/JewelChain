@@ -28,10 +28,15 @@ export const UpdateStonePage = () => {
       const stone = await getStoneInformation(stoneId);
       setStone(stone);
     } catch (error: any) {
+      // error?.message is "Returned error: Error: VM Exception while processing transaction: reverted with reason string 'Dieser Stein existiert nicht'"
+      // extract "Dieser Stein existiert nicht" from error?.message
+      const reasonIndex = error?.message?.indexOf('reason string');
+      const reason = error?.message?.substring(reasonIndex + 15, error?.message?.length - 1);
+
       showToast({
         severity: 'error',
-        summary: 'Failed to get stone information.',
-        detail: String(error),
+        summary: 'Jewel-Informationen nicht erhalten.',
+        detail: String(reason || error?.message || error),
         sticky: true,
       });
     }

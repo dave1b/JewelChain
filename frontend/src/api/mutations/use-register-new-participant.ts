@@ -18,6 +18,9 @@ export const useRegisterNewParticipant = (): RegisterNewParticipant => {
           .on('receipt', function (receipt: any) {
             console.log('created new participant', { receipt });
             resolve(receipt);
+          })
+          .on('error', (error: any) => {
+            reject(error);
           });
       } catch (error) {
         reject(error);

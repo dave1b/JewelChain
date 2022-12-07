@@ -17,6 +17,9 @@ export const useAddStep = (): AddStep => {
           .on('receipt', function (receipt: any) {
             console.log('added step', { receipt });
             resolve(receipt);
+          })
+          .on('error', (error: any) => {
+            reject(error);
           });
       } catch (error) {
         reject(error);

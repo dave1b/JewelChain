@@ -60,10 +60,15 @@ export const PassOwnershipDialog = ({ stoneId, visible, onHide, onPassedOwnershi
       onPassedOwnership();
       onHide();
     } catch (error: any) {
+      // error?.message is "Returned error: Error: VM Exception while processing transaction: reverted with reason string 'XYZ'"
+      // extract "XYZ" from error?.message
+      const reasonIndex = error?.message?.indexOf('reason string');
+      const reason = error?.message?.substring(reasonIndex + 15, error?.message?.length - 1);
+
       showToast({
         severity: 'error',
-        summary: 'Failed to pass ownership.',
-        detail: String(error),
+        summary: 'Konnte Besitz nicht weitergeben.',
+        detail: String(reason || error?.message || error),
         sticky: true,
       });
     }

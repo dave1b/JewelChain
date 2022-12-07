@@ -19,6 +19,9 @@ export const usePassOwnership = (): PassOwnership => {
           .on('receipt', function (receipt: any) {
             console.log('passed ownership', { receipt });
             resolve(receipt);
+          })
+          .on('error', (error: any) => {
+            reject(error);
           });
       } catch (error) {
         reject(error);

@@ -21,6 +21,9 @@ export const useRegisterNewStone = (): RegisterNewStone => {
           .send({ from: accountAddress })
           .on('receipt', function (receipt: any) {
             return receipt;
+          })
+          .on('error', (error: any) => {
+            reject(error);
           });
         const newStone = res.events.NewStoneRegistered.returnValues;
         resolve(newStone);
